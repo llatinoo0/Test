@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nature Glassmorphic Portfolio</title>
+
+  <!-- Fonts: Gothic/Blackletter + Clean Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Palette: cool nature tones */
+      --emerald:#10b981;
+      --moss:#6b8f71;
+      --sky:#7EC8E3;
+      --silver-mist:#cbd5e1;
+      --ink:#0c1720;
+      --white:#ffffff;
+
+      /* Glass + light */
+      --glass-bg:rgba(255,255,255,0.14);
+      --glass-bg-strong:rgba(255,255,255,0.28);
+      --glass-border:rgba(255,255,255,0.35);
+      --glass-shadow: 0 15px 40px rgba(16, 25, 20, 0.35);
+
+      /* Background image (change to your preferred nature photo) */
+      --bg-url: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop');
+
+      /* Layout */
+      --max-w:1200px;
+      --radius-xl:28px;
+      --radius-md:18px;
+      --radius-sm:12px;
+
+      /* Parallax vars (JS-updated) */
+      --parallaxX:0;
+      --parallaxY:0;
+      --scrollParallax:0;
+
+      /* Timing */
+      --t-fast:180ms;
+      --t-normal:380ms;
+      --t-slow:800ms;
+      --ease-out:cubic-bezier(.22,.61,.36,1);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--white);
+      background:#0f1b16;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:inherit;text-decoration:none}
+
+    /* Hero background with parallax */
+    .hero{
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      background-image:var(--bg-url);
+      background-size:cover; background-position:center;
+      filter:saturate(105%) contrast(95%) brightness(95%);
+      transform:translate(calc(var(--parallaxX)*0.8px), calc(var(--parallaxY)*0.8px)) translateY(calc(var(--scrollParallax)*0.15px));
+      transition:filter var(--t-normal) var(--ease-out);
+      will-change:transform;
+      z-index:-3;
+    }
+    /* Nature-tinted mist overlay for depth */
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(126,200,227,0.18), transparent 55%),
+        radial-gradient(900px 500px at 90% 80%, rgba(16,185,129,0.16), transparent 60%),
+        linear-gradient(to bottom, rgba(8,16,12,0.45) 0%, rgba(8,16,12,0.15) 40%, rgba(8,16,12,0.45) 100%);
+      mix-blend-mode:soft-light;
+      z-index:-2;
+    }
+
+    /* Top navigation (subtle, glassy chips) */
+    .nav{
+      position:fixed; top:16px; left:50%; transform:translateX(-50%);
+      display:flex; gap:16px; align-items:center;
+      padding:8px 12px;
+      background:rgba(18,28,22,0.45);
+      backdrop-filter:saturate(120%) blur(10px);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:999px;
+      box-shadow:0 8px 24px rgba(8,16,12,0.35);
+      z-index:20;
+    }
+    .logo{
+      font-family:"UnifrakturMaguntia", serif;
+      letter-spacing:.6px;
+      font-size:22px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.20), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.18);
+      text-shadow:0 1px 0 rgba(0,0,0,0.2);
+    }
+    .nav a{
+      font-weight:600; font-size:14px; opacity:.85;
+      padding:8px 12px; border-radius:999px;
+      transition:opacity var(--t-fast) var(--ease-out), transform var(--t-fast);
+    }
+    .nav a:hover{opacity:1; transform:translateY(-1px)}
+
+    /* Glassmorphic main panel */
+    .glass-panel{
+      position:relative;
+      width:min(100%, calc(var(--max-w)));
+      margin:0 24px;
+      padding:48px;
+      border-radius:var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,255,255,0.12)),
+        radial-gradient(1200px 800px at 20% 0%, rgba(255,255,255,0.20), transparent 40%),
+        var(--glass-bg);
+      backdrop-filter:saturate(120%) blur(14px);
+      border:1px solid var(--glass-border);
+      box-shadow:var(--glass-shadow);
+      overflow:hidden;
+    }
+    /* Subtle inner glow and refractive sheen */
+    .glass-panel::before{
+      content:"";
+      position:absolute; inset:-2px;
+      border-radius:inherit;
+      background:
+        radial-gradient(500px 300px at 20% 10%, rgba(255,255,255,0.28), transparent 35%),
+        radial-gradient(600px 400px at 85% 20%, rgba(126,200,227,0.18), transparent 45%);
+      pointer-events:none;
+      mix-blend-mode:screen;
+      z-index:-1;
+    }
+    .glass-panel::after{
+      content:"";
+      position:absolute; inset:0;
+      border-radius:inherit;
+      background:
+        conic-gradient(from 210deg at 30% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0.0) 25%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.0) 75%, rgba(255,255,255,0.30));
+      opacity:.35; pointer-events:none;
+      mix-blend-mode:overlay;
+    }
+
+    /* Typography fusion + accent brackets */
+    h1{
+      margin:0 0 12px;
+      font-size:clamp(38px, 5vw, 72px);
+      line-height:1.04;
+      font-weight:700;
+      color:#e8f3ee;
+    }
+    h2{
+      margin:0 0 12px;
+      font-size:clamp(28px, 3.4vw, 48px);
+      line-height:1.15;
+      font-weight:700;
+      color:#e8f3ee;
+    }
+    .section-sub{
+      margin:0 0 28px;
+      font-size:clamp(15px, 1.4vw, 18px);
+      line-height:1.7;
+      color:#e3ece7;
+      opacity:.92;
+    }
+    .accent-gothic{
+      font-family:"UnifrakturMaguntia", serif;
+      letter-spacing:.5px;
+      font-variant-ligatures:normal;
+      font-size:1.05em;
+    }
+    .bracket{
+      display:inline-block;
+      padding:0 .18em;
+      border-radius:8px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.20);
+      text-shadow:0 1px 0 rgba(0,0,0,0.25);
+    }
+    p.lead{
+      margin:0 0 28px;
+      font-size:clamp(16px, 1.6vw, 20px);
+      line-height:1.6;
+      color:#e3ece7;
+      opacity:.92;
+    }
+
+    /* CTA buttons */
+    .cta{
+      display:flex; gap:14px; align-items:center; margin-bottom:28px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:12px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.25);
+      color:#f0f6f3;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06)),
+        linear-gradient(90deg, rgba(16,185,129,0.22), rgba(126,200,227,0.22));
+      backdrop-filter:saturate(120%) blur(8px);
+      box-shadow:0 10px 24px rgba(8,16,12,0.35);
+      transition:transform var(--t-fast), box-shadow var(--t-fast), opacity var(--t-fast);
+      will-change:transform, box-shadow;
+      font-weight:600;
+    }
+    .btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 28px rgba(8,16,12,0.45);
+    }
+    .btn.secondary{
+      background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.18);
+      opacity:.9;
+    }
+    .btn.secondary:hover{opacity:1}
+
+    /* Portfolio grid with mini-glass cards */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:16px;
+    }
+    @media (max-width:960px){ .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+    @media (max-width:640px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{
+      position:relative;
+      border-radius:var(--radius-md);
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.20);
+      backdrop-filter:saturate(120%) blur(10px);
+      box-shadow:0 12px 28px rgba(10,20,14,0.35);
+      transform:translateY(6px);
+      opacity:0;
+      transition:transform var(--t-normal) var(--ease-out), opacity var(--t-normal) var(--ease-out);
+      will-change:transform, opacity;
+    }
+    .card.in-view{
+      transform:translateY(0);
+      opacity:1;
+    }
+    .card .media{
+      position:relative; height:160px;
+      background-size:cover; background-position:center;
+      filter:saturate(110%) contrast(95%);
+    }
+    .card .media::after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(12,18,14,0.65), rgba(12,18,14,0.0) 70%);
+    }
+    .card .content{
+      padding:16px;
+    }
+    .tag{
+      display:inline-block;
+      font-size:12px; font-weight:700; letter-spacing:.35px;
+      color:#eaf5ef;
+      background:linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.18);
+      padding:6px 10px; border-radius:999px;
+      backdrop-filter:saturate(120%) blur(6px);
+    }
+    .card h3{
+      margin:10px 0 6px;
+      font-size:18px; line-height:1.3; font-weight:700;
+    }
+    .card p{
+      margin:0; font-size:14px; opacity:.88; line-height:1.5;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 36px rgba(8,16,12,0.45);
+    }
+
+    /* Layered entrance animations (primary first, secondary after) */
+    .animate{
+      opacity:0; transform:translateY(12px) scale(0.98);
+      transition:opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out);
+      will-change:opacity, transform;
+    }
+    .animate.in-view{
+      opacity:1; transform:translateY(0) scale(1);
+    }
+    .primary{ transition-duration:900ms; }
+    .secondary{ transition-duration:600ms; }
+
+    /* Soft hover icon wiggle */
+    .icon{
+      width:18px; height:18px; display:inline-block;
+      filter:drop-shadow(0 1px 1px rgba(0,0,0,0.35));
+      transition:transform var(--t-fast);
+    }
+    .btn:hover .icon{ transform:translateX(2px) }
+
+    /* Pointer-driven refraction highlight on glass panel */
+    .light-follow{
+      position:absolute; inset:0; pointer-events:none; border-radius:inherit;
+      background:radial-gradient(250px 160px at var(--lx) var(--ly), rgba(255,255,255,0.25), rgba(255,255,255,0.06) 60%, transparent 70%);
+      mix-blend-mode:screen; opacity:.35;
+      transition:opacity var(--t-normal);
+    }
+
+    /* Parallax on overlay content for depth */
+    .content-parallax{
+      transform:translate(calc(var(--parallaxX)*0.15px), calc(var(--parallaxY)*0.15px));
+      transition:transform var(--t-fast) var(--ease-out);
+      will-change:transform;
+    }
+
+    /* Generic sections and containers for long scroll */
+    .section{ position:relative; padding:96px 0; }
+    .container{ width:min(100%, var(--max-w)); margin:0 auto; padding:0 24px; }
+    .section .glass-panel{ margin:0 auto; }
+
+    /* Split layout */
+    .split{
+      display:grid; grid-template-columns:1.15fr 0.85fr; gap:28px;
+    }
+    @media (max-width:960px){ .split{ grid-template-columns:1fr; } }
+
+    /* Feature grid */
+    .features{
+      display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px;
+    }
+    @media (max-width:960px){ .features{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media (max-width:640px){ .features{ grid-template-columns:1fr; } }
+    .feature{
+      padding:18px;
+      border-radius:var(--radius-md);
+      background:linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.20);
+      backdrop-filter:saturate(120%) blur(10px);
+      box-shadow:0 12px 28px rgba(10,20,14,0.35);
+      transition:transform var(--t-normal) var(--ease-out), box-shadow var(--t-normal) var(--ease-out);
+    }
+    .feature:hover{ transform:translateY(-3px); box-shadow:0 18px 36px rgba(8,16,12,0.45); }
+    .feature h3{ margin:8px 0 6px; font-size:18px; }
+    .feature p{ margin:0; font-size:14px; opacity:.9; }
+
+    /* Journal/Blog grid reusing cards */
+    .journal .card .media{ height:140px; }
+
+    /* Timeline / Process */
+    .timeline{
+      position:relative; margin-top:8px;
+      display:grid; gap:16px;
+    }
+    .step{
+      display:grid; grid-template-columns:64px 1fr; gap:14px; align-items:flex-start;
+      padding:16px; border-radius:var(--radius-md);
+      background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.20);
+      backdrop-filter:saturate(120%) blur(8px);
+    }
+    .step .num{
+      width:48px; height:48px; display:grid; place-items:center;
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(16,185,129,0.22), rgba(126,200,227,0.22));
+      border:1px solid rgba(255,255,255,0.28);
+      font-weight:700;
+    }
+    .step h4{ margin:4px 0 6px; font-size:16px; }
+    .step p{ margin:0; font-size:14px; opacity:.9; }
+
+    /* Testimonials */
+    .testimonials{
+      display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px;
+    }
+    @media (max-width:960px){ .testimonials{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media (max-width:640px){ .testimonials{ grid-template-columns:1fr; } }
+    .quote{
+      padding:18px; border-radius:var(--radius-md);
+      background:linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.20);
+      backdrop-filter:saturate(120%) blur(8px);
+      box-shadow:0 12px 28px rgba(10,20,14,0.35);
+    }
+    .quote p{ margin:0 0 10px; font-size:14px; line-height:1.6; }
+    .quote .who{ font-weight:700; opacity:.95; }
+
+    /* Contact form */
+    form{
+      display:grid; gap:14px;
+    }
+    .field{
+      display:grid; gap:6px;
+    }
+    .field label{ font-size:13px; opacity:.85; }
+    .input, textarea{
+      width:100%; padding:12px 14px; color:#eaf5ef;
+      background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.22);
+      border-radius:12px; outline:none;
+      backdrop-filter:saturate(120%) blur(6px);
+    }
+    textarea{ min-height:120px; resize:vertical; }
+
+    /* Footer */
+    footer{
+      padding:36px 24px; text-align:center; opacity:.85;
+      background:linear-gradient(180deg, rgba(10,16,12,0.6), rgba(10,16,12,0.9));
+      border-top:1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Scenic parallax band with multiple layers */
+    .parallax-band{
+      position:relative; height:75vh; min-height:520px; overflow:hidden; isolation:isolate;
+    }
+    .parallax-band .layer{
+      position:absolute; inset:-5%; background-size:cover; background-position:center;
+      will-change:transform; z-index:-1; opacity:0.9;
+      transform:translateY(0) translateX(0);
+    }
+    /* Different depth speeds (multiplied by --scrollParallax in px) */
+    .parallax-band .l-back{ transform:translateY(calc(var(--scrollParallax)*0.06px)) translateX(calc(var(--parallaxX)*0.3px)); filter:brightness(0.9) saturate(95%); }
+    .parallax-band .l-mid{  transform:translateY(calc(var(--scrollParallax)*0.10px)) translateX(calc(var(--parallaxX)*0.45px)); }
+    .parallax-band .l-front{transform:translateY(calc(var(--scrollParallax)*0.14px)) translateX(calc(var(--parallaxX)*0.65px)); }
+    /* Soft mists for atmosphere */
+    .parallax-band::after{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(1000px 500px at 15% 15%, rgba(126,200,227,0.18), transparent 55%),
+        radial-gradient(900px 600px at 85% 85%, rgba(16,185,129,0.16), transparent 60%),
+        linear-gradient(to top, rgba(8,16,12,0.55), rgba(8,16,12,0.0) 45%, rgba(8,16,12,0.55));
+      mix-blend-mode:soft-light; z-index:-1;
+    }
+    .band-content{
+      position:relative; height:100%; display:grid; place-items:center;
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion:reduce){
+      .animate, .card, .btn, .content-parallax, .parallax-band .layer{ transition:none !important; transform:none !important }
+      .hero::before{ transform:none !important }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" aria-label="Primary">
+    <div class="logo">VIO</div>
+    <a href="#work" aria-label="Work">Work</a>
+    <a href="#about" aria-label="About">About</a>
+    <a href="#contact" aria-label="Contact">Contact</a>
+  </nav>
+
+  <!-- Hero section with nature backdrop + glassmorphic overlay -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <div class="glass-panel animate primary" id="panel">
+      <div class="light-follow" id="light"></div>
+
+      <header class="content-parallax">
+        <h1>
+          <span class="bracket accent-gothic">(Create)</span>
+          with <span class="accent-gothic">Nature</span>
+        </h1>
+        <p class="lead">
+          A serene, premium portfolio where technology and nature coexist.
+          Glassmorphic UI, soft refractions, and layered motion guide your story.
+        </p>
+        <div class="cta">
+          <a class="btn" href="#work">
+            Explore Portfolio
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a class="btn secondary" href="#" download>
+            Download (Case Study)
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+          </a>
+        </div>
+      </header>
+
+      <!-- Portfolio grid -->
+      <div class="grid animate secondary" id="work">
+        <!-- Item 1 -->
+        <article class="card" aria-label="Moss UI Kit">
+          <div class="media" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="content">
+            <span class="tag accent-gothic">[Moss]</span>
+            <h3>Moss UI Kit</h3>
+            <p>Glass components with emerald accents, tuned for nature-focused brands.</p>
+          </div>
+        </article>
+        <!-- Item 2 -->
+        <article class="card" aria-label="Silver Mist Landing">
+          <div class="media" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="content">
+            <span class="tag accent-gothic">(Mist)</span>
+            <h3>Silver Mist Landing</h3>
+            <p>Frosted glass hero with slow parallax and reflective highlights.</p>
+          </div>
+        </article>
+        <!-- Item 3 -->
+        <article class="card" aria-label="Sky Blue Dashboard">
+          <div class="media" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="content">
+            <span class="tag accent-gothic">[Sky]</span>
+            <h3>Sky Blue Dashboard</h3>
+            <p>Minimal analytics with airy spacing and elegant micro-interactions.</p>
+          </div>
+        </article>
+        <!-- Item 4 -->
+        <article class="card" aria-label="Lush Portfolio">
+          <div class="media" style="background-image:url('https://images.unsplash.com/photo-1470770903676-69b98201ea1c?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="content">
+            <span class="tag accent-gothic">(Lush)</span>
+            <h3>Lush Portfolio</h3>
+            <p>Designer showcase with layered animations and bracketed accents.</p>
+          </div>
+        </article>
+        <!-- Item 5 -->
+        <article class="card" aria-label="Evergreen Brand Pack">
+          <div class="media" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="content">
+            <span class="tag accent-gothic">[Evergreen]</span>
+            <h3>Evergreen Brand Pack</h3>
+            <p>Logo marks and typography system blending Gothic accents with Sans clarity.</p>
+          </div>
+        </article>
+        <!-- Item 6 -->
+        <article class="card" aria-label="Cascade Motion System">
+          <div class="media" style="background-image:url('https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1200&auto=format&fit=crop');"></div>
+          <div class="content">
+            <span class="tag accent-gothic">(Cascade)</span>
+            <h3>Cascade Motion System</h3>
+            <p>Staggered timing, soft hover states, and gentle fades for immersive flow.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scenic Parallax Band for scroll experience -->
+  <section class="parallax-band" aria-label="Scenic Parallax Band">
+    <div class="layer l-back"  style="background-image:url('https://images.unsplash.com/photo-1464823063530-08f10ed1a2dd?q=80&w=1800&auto=format&fit=crop');"></div>
+    <div class="layer l-mid"   style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1800&auto=format&fit=crop');"></div>
+    <div class="layer l-front" style="background-image:url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1800&auto=format&fit=crop');"></div>
+
+    <div class="band-content container">
+      <div class="glass-panel animate primary" style="max-width:860px;">
+        <h2><span class="bracket accent-gothic">(Flow)</span> with the Landscape</h2>
+        <p class="section-sub">Subtle depth via layered parallax. The distant peaks drift slower, the rivers glide faster—mirroring how we compose motion to match meaning.</p>
+        <div class="cta">
+          <a class="btn" href="#about">Our (Approach)</a>
+          <a class="btn secondary" href="#journal">See Journal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About section -->
+  <section id="about" class="section" aria-label="About">
+    <div class="container">
+      <div class="glass-panel animate primary">
+        <div class="split">
+          <div>
+            <h2><span class="bracket accent-gothic">[About]</span> the Studio</h2>
+            <p class="section-sub">We craft glassmorphic interfaces inspired by forests, water, and light—uniting Gothic character with Sans clarity to tell bold stories.</p>
+            <div class="features">
+              <div class="feature animate secondary">
+                <h3><span class="accent-gothic">(Clarity)</span> First</h3>
+                <p>Readable Sans UI with gentle contrasts and generous rhythm.</p>
+              </div>
+              <div class="feature animate secondary">
+                <h3><span class="accent-gothic">[Texture]</span> with Glass</h3>
+                <p>Refractions, frosts, and highlights that never overpower content.</p>
+              </div>
+              <div class="feature animate secondary">
+                <h3><span class="accent-gothic">(Motion)</span> Layers</h3>
+                <p>Primary slides ease in; secondary details follow with finesse.</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="grid journal">
+              <article class="card animate secondary">
+                <div class="media" style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop');"></div>
+                <div class="content">
+                  <span class="tag accent-gothic">[Craft]</span>
+                  <h3>Typeface Harmony</h3>
+                  <p>Pairing Unifraktur Maguntia with Inter for expressive hierarchy.</p>
+                </div>
+              </article>
+              <article class="card animate secondary">
+                <div class="media" style="background-image:url('https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop');"></div>
+                <div class="content">
+                  <span class="tag accent-gothic">(Light)</span>
+                  <h3>Refraction Studies</h3>
+                  <p>Simulating sheen using gradients, conic glows, and blur.</p>
+                </div>
+              </article>
+              <article class="card animate secondary">
+                <div class="media" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop');"></div>
+                <div class="content">
+                  <span class="tag accent-gothic">[Green]</span>
+                  <h3>Palette Tuning</h3>
+                  <p>Emerald, moss, sky, and silver-mist—cool and serene.</p>
+                </div>
+              </article>
+              <article class="card animate secondary">
+                <div class="media" style="background-image:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop');"></div>
+                <div class="content">
+                  <span class="tag accent-gothic">(Hover)</span>
+                  <h3>Micro-Interactions</h3>
+                  <p>Small, fast, and additive—not distracting.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Journal / Case notes -->
+  <section id="journal" class="section" aria-label="Journal">
+    <div class="container">
+      <div class="glass-panel animate primary">
+        <h2><span class="bracket accent-gothic">(Journal)</span> and Case Notes</h2>
+        <p class="section-sub">Behind the scenes—sketches, decisions, and iterations that shape each build.</p>
+
+        <div class="grid">
+          <article class="card animate secondary">
+            <div class="media" style="background-image:url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="content">
+              <span class="tag accent-gothic">[Flow]</span>
+              <h3>Motion Timing Map</h3>
+              <p>Mapping primary vs secondary timing to narrative beats.</p>
+            </div>
+          </article>
+          <article class="card animate secondary">
+            <div class="media" style="background-image:url('https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="content">
+              <span class="tag accent-gothic">(Frost)</span>
+              <h3>Glass Depth Tests</h3>
+              <p>Balancing blur, contrast, and blend modes for clarity.</p>
+            </div>
+          </article>
+          <article class="card animate secondary">
+            <div class="media" style="background-image:url('https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="content">
+              <span class="tag accent-gothic">[Glyph]</span>
+              <h3>Gothic Accents</h3>
+              <p>Where to use blackletter for emphasis without noise.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Another scenic parallax band -->
+  <section class="parallax-band" aria-label="Valley Parallax">
+    <div class="layer l-back"  style="background-image:url('https://images.unsplash.com/photo-1473116763249-2faaef81ccda?q=80&w=1800&auto=format&fit=crop');"></div>
+    <div class="layer l-mid"   style="background-image:url('https://images.unsplash.com/photo-1470246973918-29a93221c455?q=80&w=1800&auto=format&fit=crop');"></div>
+    <div class="layer l-front" style="background-image:url('https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?q=80&w=1800&auto=format&fit=crop');"></div>
+    <div class="band-content container">
+      <div class="glass-panel animate primary" style="max-width:860px;">
+        <h2><span class="bracket accent-gothic">[Balance]</span> Minimal + Organic</h2>
+        <p class="section-sub">We keep the interface clean and futuristic—yet grounded with natural rhythm, light, and calm motion.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process / Timeline -->
+  <section class="section" aria-label="Process">
+    <div class="container">
+      <div class="glass-panel animate primary">
+        <h2><span class="bracket accent-gothic">(Process)</span> we Follow</h2>
+        <p class="section-sub">A clear path from concept to craft—each step framed with purpose.</p>
+        <div class="timeline">
+          <div class="step animate secondary">
+            <div class="num accent-gothic">[1]</div>
+            <div>
+              <h4>Discovery & Direction</h4>
+              <p>Goals, audience, tone. We set the visual + motion language early.</p>
+            </div>
+          </div>
+          <div class="step animate secondary">
+            <div class="num accent-gothic">[2]</div>
+            <div>
+              <h4>System & Style</h4>
+              <p>Palette, typography fusion, glass depth, and motion map.</p>
+            </div>
+          </div>
+          <div class="step animate secondary">
+            <div class="num accent-gothic">[3]</div>
+            <div>
+              <h4>Build & Polish</h4>
+              <p>Interaction tuning, hover softness, and performance checks.</p>
+            </div>
+          </div>
+          <div class="step animate secondary">
+            <div class="num accent-gothic">[4]</div>
+            <div>
+              <h4>Launch & Evolve</h4>
+              <p>Measure, iterate, and grow—without losing calm and clarity.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" aria-label="Testimonials">
+    <div class="container">
+      <div class="glass-panel animate primary">
+        <h2><span class="bracket accent-gothic">(Voices)</span> from Partners</h2>
+        <p class="section-sub">Thoughtful craft, steady cadence, and interfaces that feel alive.</p>
+
+        <div class="testimonials">
+          <div class="quote animate secondary">
+            <p>“The glass work is subtle yet unmistakable—our site feels premium without shouting.”</p>
+            <div class="who accent-gothic">[Aurora Labs]</div>
+          </div>
+          <div class="quote animate secondary">
+            <p>“Motion finally has meaning. The layered timing guides attention naturally.”</p>
+            <div class="who accent-gothic">(Northwind)</div>
+          </div>
+          <div class="quote animate secondary">
+            <p>“A rare mix of aesthetics and performance. Calm, elegant, and fast.”</p>
+            <div class="who accent-gothic">[Evergreen]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section" aria-label="Contact">
+    <div class="container">
+      <div class="glass-panel animate primary">
+        <h2><span class="bracket accent-gothic">[Contact]</span> the Studio</h2>
+        <p class="section-sub">Tell us about your product or portfolio. We’ll reply with ideas and a light-weight plan.</p>
+
+        <form>
+          <div class="field">
+            <label for="name">Name</label>
+            <input class="input" id="name" name="name" placeholder="Your name" />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" placeholder="you@domain.com" />
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Project goals, timeline, references…"></textarea>
+          </div>
+          <div class="cta">
+            <button class="btn" type="submit">
+              Send (Hello)
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              </svg>
+            </button>
+            <a class="btn secondary" href="#hero">Back to Top</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span class="accent-gothic">(VIO)</span> Nature Glassmorphic Portfolio · Calm by Design</div>
+  </footer>
+
+  <script>
+    // Parallax (mouse + scroll), entrance stagger, and glass refraction highlight.
+
+    const hero = document.getElementById('hero');
+    const panel = document.getElementById('panel');
+    const light = document.getElementById('light');
+
+    // Intersection Observer for fade/slide-in
+    const inView = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          inView.unobserve(entry.target);
+        }
+      })
+    },{threshold:0.12});
+
+    document.querySelectorAll('.animate, .card, .feature, .step, .quote').forEach(el=>{
+      inView.observe(el);
+    });
+
+    // Stagger cards
+    document.querySelectorAll('.card').forEach((card, i)=>{
+      card.style.transitionDelay = `${120 + i*90}ms`;
+    });
+
+    // Mouse parallax + refraction highlight following cursor
+    hero.addEventListener('pointermove', (e)=>{
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const nx = (x / rect.width) - 0.5;   // normalized -0.5..0.5
+      const ny = (y / rect.height) - 0.5;
+
+      // Update parallax CSS vars (background moves more, content less)
+      document.documentElement.style.setProperty('--parallaxX', (nx * 40).toFixed(2));
+      document.documentElement.style.setProperty('--parallaxY', (ny * 40).toFixed(2));
+
+      // Refraction highlight on the glass panel
+      const pRect = panel.getBoundingClientRect();
+      const lx = Math.min(Math.max(e.clientX - pRect.left, 0), pRect.width);
+      const ly = Math.min(Math.max(e.clientY - pRect.top, 0), pRect.height);
+      panel.style.setProperty('--lx', `${lx}px`);
+      panel.style.setProperty('--ly', `${ly}px`);
+      light.style.opacity = 0.45;
+    });
+    hero.addEventListener('pointerleave', ()=>{
+      document.documentElement.style.setProperty('--parallaxX', 0);
+      document.documentElement.style.setProperty('--parallaxY', 0);
+      light.style.opacity = 0.25;
+    });
+
+    // Scroll parallax on background (+ scenic bands)
+    const onScroll = ()=>{
+      const sc = window.scrollY || document.documentElement.scrollTop || 0;
+      document.documentElement.style.setProperty('--scrollParallax', sc.toFixed(2));
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive:true});
+  </script>
+</body>
+</html>
